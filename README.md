@@ -1,38 +1,46 @@
-# ADB Storage Inspector
+# Android Toolkit
 
-**ADB-powered Android phone storage inspector + debloater skill for Claude Code / OpenCode.**
+**All-in-one Android phone utility skill for Claude Code / OpenCode.**
 
-Inspired by SD Maid SE — replicates its features using plain ADB commands. Works across all Android brands (Xiaomi, Samsung, OPPO, vivo, Nothing, Pixel, etc.) with brand-specific bloat lists.
+7 modules over ADB: storage inspection, debloat, battery doctor, crash analyzer, automation, system tuner, and network security. Universal across brands.
 
-## Features
+## Modules
 
-- **Storage analysis** — `du` hierarchy, largest files, app data, WhatsApp breakdown
-- **Debloat** — universal + brand-specific bloat lists for MIUI, One UI, ColorOS, Funtouch, Nothing OS
-- **Safe deletes** — WhatsApp DB cleanup, camera roll, empty folders, corpse data
-- **Duplicate detection** — `md5sum` group-by-hash
-- **Backup before cleanup** — `adb pull` to PC first
+| # | Module | What it does |
+|---|--------|-------------|
+| 1 | **Storage Inspection** | `du` hierarchy, WhatsApp/DCIM breakdown, SD Maid SE features, safe cleanup |
+| 2 | **Debloat** | Brand detection + universal + 5 brand lists (MIUI, Samsung, ColorOS, vivo, Nothing) |
+| 3 | **Battery Doctor** | Per-app drain, wakelocks, doze analysis, fix recommendations |
+| 4 | **Crash Analyzer** | logcat crash, bootloop, reboot reason, kernel panic |
+| 5 | **Automation** | `input tap/swipe/text/keyevent`, activity launcher, practical scripts |
+| 6 | **System Tuner** | Animation speed, WiFi scan interval, battery presets, restore defaults |
+| 7 | **Network Security** | ADB over TCP, verified boot, unknown sources, scorecard |
+
+## Brand Support
+
+| Brand | Tested |
+|---|---|
+| Xiaomi / MIUI | ✅ Real device (Redmi Note 11, Android 13) |
+| Samsung One UI | Lists compiled |
+| ColorOS/OPPO/Realme | Lists compiled |
+| vivo / Funtouch | Lists compiled |
+| Nothing OS | Lists compiled |
+| Universal 3rd-party | ✅ Verified on real device |
 
 ## Quick Start
 
 ```powershell
 adb shell df -h /sdcard
 adb shell getprop ro.product.manufacturer
-adb shell pm list packages
 ```
-
-## Brand Support
-
-| Brand | Bloat list | Tested |
-|---|---|---|
-| Xiaomi / MIUI | 25 packages | ✅ Real device |
-| Samsung One UI | 18 packages | |
-| OPPO / ColorOS / Realme | 14 packages | |
-| vivo / Funtouch | 12 packages | |
-| Nothing OS | 4 packages | |
-| Universal 3rd-party | 18 packages (Facebook, Netflix, Amazon...) | ✅ |
 
 ## Usage (OpenCode)
 
+```
+skill android-toolkit
+```
+
+Or load per-session:
 ```
 skill adb-storage-inspector
 ```
@@ -44,14 +52,12 @@ git clone https://github.com/rikirinjani/adb-storage-inspector.git
 # Symlink into agent skills directory
 ```
 
-## Structure
+## Safety
 
-```
-adb-storage-inspector/
-  README.md
-  SKILL.md                       # install anywhere
-  .config/opencode/skills/adb-storage-inspector/SKILL.md   # OpenCode path
-```
+- Backup before delete
+- Never remove launcher, Play Services, or Phone/SMS providers
+- Disable instead of uninstall if unsure
+- All changes user-level; factory reset restores everything
 
 ## License
 
