@@ -260,7 +260,27 @@ adb shell pm disable-user --user 0 <package.name>
 adb shell pm enable <package.name>
 ```
 
-## 7. Debloat Safety Rules
+## 7. Android Version Compatibility
+
+| Feature | Min Android | Notes |
+|---|---|---|
+| `pm list packages` | 1.0 | Universal |
+| `pm uninstall -k --user 0` | 4.0 | Some OEMs block on newer Android; fallback to disable |
+| `pm disable-user --user 0` | 5.0 | Reliable fallback when uninstall fails |
+| `df -h /sdcard` | 1.0 | Universal |
+| `du` on `/sdcard/` | 1.0 | Universal |
+| `getprop ro.product.manufacturer` | 1.0 | Universal |
+| WhatsApp at `Android/media/` | 11+ | Pre-11: at `/sdcard/WhatsApp/` root |
+| `pm trim-caches` | 7.0+ | Ignores large app data, only cache |
+| Scoped storage restrictions | 11+ | Can't read other apps' `Android/data/` dirs |
+
+**Version-specific gotchas:**
+- **Android 14+** — Some brands restrict `pm uninstall` for system apps more aggressively
+- **Android 11+** — Scoped storage hides `/sdcard/Android/data/` contents of other apps via `ls`; `du` still works
+- **MIUI 14+** — Some packages flag `Failure [-1000]` on uninstall but accept `disable-user`
+- **Samsung One UI 6+** — Bixby packages may be protected; try disable first
+
+## 8. Debloat Safety Rules
 
 1. Never remove the launcher
 2. Never remove Play Services (com.google.android.gms)
