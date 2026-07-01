@@ -1,56 +1,56 @@
 # ADB Storage Inspector
 
-ADB-powered Android phone storage inspector skill for **Claude Code** / **OpenCode**.
+**ADB-powered Android phone storage inspector + debloater skill for Claude Code / OpenCode.**
 
-Inspired by SD Maid SE — replicates its key features (`du` hierarchy, largest files, WhatsApp cleanup, app data analysis, corpse detection, empty folder cleaning) using plain ADB commands.
+Inspired by SD Maid SE — replicates its features using plain ADB commands. Works across all Android brands (Xiaomi, Samsung, OPPO, vivo, Nothing, Pixel, etc.) with brand-specific bloat lists.
 
-## Usage
+## Features
 
-Load the skill in any session:
+- **Storage analysis** — `du` hierarchy, largest files, app data, WhatsApp breakdown
+- **Debloat** — universal + brand-specific bloat lists for MIUI, One UI, ColorOS, Funtouch, Nothing OS
+- **Safe deletes** — WhatsApp DB cleanup, camera roll, empty folders, corpse data
+- **Duplicate detection** — `md5sum` group-by-hash
+- **Backup before cleanup** — `adb pull` to PC first
+
+## Quick Start
+
+```powershell
+adb shell df -h /sdcard
+adb shell getprop ro.product.manufacturer
+adb shell pm list packages
+```
+
+## Brand Support
+
+| Brand | Bloat list | Tested |
+|---|---|---|
+| Xiaomi / MIUI | 25 packages | ✅ Real device |
+| Samsung One UI | 18 packages | |
+| OPPO / ColorOS / Realme | 14 packages | |
+| vivo / Funtouch | 12 packages | |
+| Nothing OS | 4 packages | |
+| Universal 3rd-party | 18 packages (Facebook, Netflix, Amazon...) | ✅ |
+
+## Usage (OpenCode)
 
 ```
 skill adb-storage-inspector
 ```
 
-Or install as a permanent skill by symlinking into your agent's skills directory:
+## Installation
 
 ```bash
-# Claude Code
-ln -s "$PWD" ~/.claude/skills/adb-storage-inspector
-
-# OpenCode
-ln -s "$PWD/.config/opencode/skills/adb-storage-inspector" ~/.config/opencode/skills/
+git clone https://github.com/rikirinjani/adb-storage-inspector.git
+# Symlink into agent skills directory
 ```
-
-## Prerequisites
-
-- Android device with **USB Debugging** enabled
-- ADB installed on host machine
-- Device connected via USB and authorized (`adb devices` shows `device`)
-
-## What it does
-
-| Feature | ADB equivalent |
-|---|---|
-| Overall storage overview | `df -h` |
-| Folder size analysis | `du -h -d 1` |
-| Largest files | `find + sort` |
-| WhatsApp media breakdown | Per-type size (Images, Video, Audio, Documents) |
-| WhatsApp DB backup cleanup | Keep latest, delete old |
-| App data hogs | `du -h -d 1 /sdcard/Android/data` |
-| Corpse finder | Orphaned data dirs for uninstalled apps |
-| App cache trim | `pm trim-caches` |
-| Empty folder cleanup | `find -type d -empty -delete` |
-| Duplicate detection | `md5sum` group-by-hash |
-| Safe backup before delete | `adb pull` to PC first |
 
 ## Structure
 
 ```
 adb-storage-inspector/
-├── README.md
-└── .config/opencode/skills/adb-storage-inspector/
-    └── SKILL.md          # The skill payload
+  README.md
+  SKILL.md                       # install anywhere
+  .config/opencode/skills/adb-storage-inspector/SKILL.md   # OpenCode path
 ```
 
 ## License
